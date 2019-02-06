@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { changeSearchTerm } from '../state/searchReducer';
+import { changeSearchTerm, searchCountrysEmissions } from '../state/searchReducer';
 
 class SearchBar extends Component {
   render() {
@@ -12,12 +11,7 @@ class SearchBar extends Component {
 
     const search = (event) => {
       event.preventDefault();
-      console.log('nappia painettu', this.props.searchTerm);
-      axios
-        .get(`http://localhost:3000/emissions/${this.props.searchTerm}`)
-        .then(response => {
-          console.log(response);
-        });
+      this.props.searchCountrysEmissions(this.props.searchTerm);
     };
 
     return (
@@ -32,12 +26,13 @@ class SearchBar extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    searchTerm: state.searchTerm,
+    searchTerm: state.search.searchTerm,
   };
 };
 
 const mapDispatchToProps = {
   changeSearchTerm,
+  searchCountrysEmissions
 };
 
 const ConnectedSearchBar = connect(
