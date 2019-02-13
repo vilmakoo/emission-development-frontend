@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const countrysEmissions = async (country) => {
-  const response = await axios.get(`/api/emissions/${country}`);
-  return response.data.emissions; // muuta tää json fiksummaksi bäkkärin puolella
+const countrysEmissions = async (country, perCapita) => {
+  const response = await axios.get(`/api/emissions?country=${country}&percapita=${perCapita}`);
+  return response.data;
 };
 
 export default { countrysEmissions };

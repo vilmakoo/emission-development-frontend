@@ -9,10 +9,13 @@ const searchReducer = (state = initialState, action) => {
       searchTerm: action.searchTerm
     };
 
-  case 'SEARCH':
+  case 'SET_RESULT':
     return {
       ...state,
-      emissions: action.data };
+      country: action.country,
+      emissions: action.emissions,
+      populations: action.populations
+    };
 
   default:
     return state;
@@ -28,11 +31,13 @@ export const changeSearchTerm = (searchTerm) => {
 
 export const searchCountrysEmissions = (country) => {
   return async (dispatch) => {
-    const emissions = await searchService.countrysEmissions(country);
+    const data = await searchService.countrysEmissions(country, true);
 
     dispatch({
-      type: 'SEARCH',
-      data: emissions,
+      type: 'SET_RESULT',
+      country: data.country,
+      emissions: data.emissions,
+      populations: data.populations
     });
   };
 };

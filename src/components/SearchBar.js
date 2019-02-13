@@ -16,9 +16,10 @@ class SearchBar extends Component {
 
     return (
       <Form onSubmit={search}>
-        <Form.Label>Search</Form.Label>
-        <Form.Control type='input' value={this.props.searchTerm} onChange={handleSearchTermChange} placeholder='Search' />
-        <Button type='submit'>Search</Button>
+        <Form.Label className={'search-title'}>Search</Form.Label>
+        {/* TODO: search with what? laita siis ohjeistus */}
+        <Form.Control className={'search-input'} type='input' value={this.props.searchTerm} onChange={handleSearchTermChange} placeholder='Search' />
+        <Button className={'search-button'} type='submit'>Search</Button>
       </Form>
     );
   }
