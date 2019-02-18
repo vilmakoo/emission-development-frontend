@@ -1,20 +1,26 @@
 import searchService from '../services/search';
 
-const initialState = { searchTerm: '' };
+const initialState = { searchTerm: '', searchPopulations: false };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
   case 'CHANGE_SEARCH_TERM':
     return {
+      ...state,
       searchTerm: action.searchTerm
+    };
+
+  case 'TOGGLE_POPULATION_CHECK_BOX':
+    return {
+      ...state,
+      searchPopulations: !state.searchPopulations
     };
 
   case 'SET_RESULT':
     return {
       ...state,
       country: action.country,
-      emissions: action.emissions,
-      populations: action.populations
+      data: action.data
     };
 
   default:
@@ -29,15 +35,20 @@ export const changeSearchTerm = (searchTerm) => {
   };
 };
 
-export const searchCountrysEmissions = (country) => {
+export const togglePopulationCheckBox = () => {
+  return {
+    type: 'TOGGLE_POPULATION_CHECK_BOX'
+  };
+};
+
+export const searchCountrysEmissions = (country, searchPopulations) => {
   return async (dispatch) => {
-    const data = await searchService.countrysEmissions(country, true);
+    const data = await searchService.countrysEmissions(country, searchPopulations);
 
     dispatch({
       type: 'SET_RESULT',
       country: data.country,
-      emissions: data.emissions,
-      populations: data.populations
+      data: data.data
     });
   };
 };

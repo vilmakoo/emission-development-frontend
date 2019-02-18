@@ -5,35 +5,30 @@ import { connect } from 'react-redux';
 class Result extends Component {
   render() {
     const options = {
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        width: [1, 1, 4]
-      },
       theme: {
-        palette: 'palette5'
+        palette: 'palette1'
       },
       yaxis: [
         {
           min: 0,
-          max: this.props.emissions ? this.props.emissions.map(e => e.value).reduce((a, b) => Math.max(a,b)) + 50000 : 1000,
+          max: this.props.data ? this.props.data.map(d => d.emissions).reduce((a, b) => Math.max(a,b), 0) + 50000 : 1000,
+          seriesName: 'CO²-Emissions',
           axisTicks: {
             show: true,
           },
           axisBorder: {
             show: true,
-            color: '#2B908F',
+            color: '#008FFB',
           },
           labels: {
             style: {
-              color: '#2B908F',
+              color: '#008FFB',
             }
           },
           title: {
-            text: 'CO²-emissions',
+            text: 'CO²-emissions (kt)',
             style: {
-              color: '#2B908F',
+              color: '#008FFB',
             }
           },
           tooltip: {
@@ -42,28 +37,51 @@ class Result extends Component {
         },
         {
           min: 0,
-          max: this.props.populations ? this.props.populations.map(p => p.value).reduce((a, b) => Math.max(a,b)) + 1000000 : 1000,
-          seriesName: 'Emissions',
+          max: (this.props.data && this.props.data.map(d => d.population)) ? this.props.data.map(d => d.population).reduce((a, b) => Math.max(a,b), 0) + 1000000 : 1000,
+          seriesName: 'Population',
+          axisTicks: {
+            show: true,
+          },
+          axisBorder: {
+            show: true,
+            color: '#00E396'
+          },
+          labels: {
+            style: {
+              color: '#00E396',
+            }
+          },
+          title: {
+            text: 'Population',
+            style: {
+              color: '#00E396',
+            }
+          },
+        },
+        {
+          seriesName: 'CO²-Emissions',
+          min: 0,
+          max: (this.props.data && this.props.data.map(d => d.perCapita)) ? this.props.data.map(d => d.perCapita).reduce((a, b) => Math.max(a,b), 0) + 0.005 : 0.1,
           opposite: true,
           axisTicks: {
             show: true,
           },
           axisBorder: {
             show: true,
-            color: '#F9A3A4'
+            color: '#FEB019',
           },
           labels: {
             style: {
-              color: '#F9A3A4',
+              color: '#FEB019',
             }
           },
           title: {
-            text: 'Population',
+            text: 'CO²-emissions Per Capita (kt)',
             style: {
-              color: '#F9A3A4',
+              color: '#FEB019',
             }
-          },
-        },
+          }
+        }
       ],
       tooltip: {
         fixed: {
@@ -81,23 +99,35 @@ class Result extends Component {
     };
 
     const series = [{
-      name: 'Emissions',
+      name: 'CO²-Emissions',
       type: 'line',
-      data: this.props.emissions ? this.props.emissions.filter(e => e.year !== null && e.value !== null).map((e) => {
+      data: (this.props.data && this.props.data.map(d => d.emissions)) ? this.props.data.filter(d => d.emissions !== null).map((d) => {
         return {
-          x: e.year,
-          y: e.value
+          x: d.year,
+          y: d.emissions
         };
       }) : []
     }, {
       name: 'Population',
       type: 'line',
-      data: this.props.populations ? this.props.populations.filter(p => p.year !== null && p.value !== null).map((p) => {
+      data: (this.props.data && this.props.data.map(d => d.population)) ? this.props.data.filter(d => d.population !== null).map((d) => {
         return {
-          x: p.year,
-          y: p.value
+          x: d.year,
+          y: d.population
         };
       }) : []
+    }, {
+      // TODO: per capita omaan charttiinsa
+      name: 'CO²-Emissions Per Capita',
+      type: 'line',
+      data: (this.props.data && this.props.data.map(d => d.perCapita))
+        ? this.props.data.filter(d => d.perCapita !== null).map((d) => {
+          return {
+            x: d.year,
+            y: d.perCapita
+          };
+        })
+        : []
     }];
 
     return (
@@ -108,6 +138,7 @@ class Result extends Component {
           {/* näytä alla olevat vain jos on jotain näytettävää eli showResult = true */}
           {/* näytä joku varoitushässäkkä jos country on NOT FOUND */}
           <div id="country"><b>Country: {this.props.country}</b></div>
+          <p>Note that the scales of the axes are different.</p>
 
           <div id="chart">
             <Chart options={options} series={series} type="line" height="800px" width="1000px" />
@@ -120,9 +151,8 @@ class Result extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    emissions: state.search.emissions,
     country: state.search.country,
-    populations: state.search.populations
+    data: state.search.data
   };
 };
 
