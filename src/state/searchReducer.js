@@ -1,6 +1,6 @@
 import searchService from '../services/search';
 
-const initialState = { searchTerm: '', searchPopulations: false };
+const initialState = { searchTerm: '', searchPopulations: false, compare: false };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -16,11 +16,18 @@ const searchReducer = (state = initialState, action) => {
       searchPopulations: !state.searchPopulations
     };
 
+  case 'TOGGLE_COMPARE_CHECK_BOX':
+    return {
+      ...state,
+      compare: !state.compare
+    };
+
   case 'SET_RESULT':
     return {
       ...state,
       country: action.country,
-      data: action.data
+      data: action.data,
+      highIncomeAverages: action.highIncomeAverages
     };
 
   default:
@@ -41,14 +48,21 @@ export const togglePopulationCheckBox = () => {
   };
 };
 
-export const searchCountrysEmissions = (country, searchPopulations) => {
+export const toggleCompareCheckBox = () => {
+  return {
+    type: 'TOGGLE_COMPARE_CHECK_BOX'
+  };
+};
+
+export const searchCountrysEmissions = (country, searchPopulations, compare) => {
   return async (dispatch) => {
-    const data = await searchService.countrysEmissions(country, searchPopulations);
+    const data = await searchService.countrysEmissions(country, searchPopulations, compare);
 
     dispatch({
       type: 'SET_RESULT',
-      country: data.country,
-      data: data.data
+      country: data.country.name,
+      data: data.country.data,
+      highIncomeAverages: data.highIncomeAverages
     });
   };
 };

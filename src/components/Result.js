@@ -4,102 +4,143 @@ import { connect } from 'react-redux';
 
 class Result extends Component {
   render() {
-    const options = {
-      theme: {
-        palette: 'palette1'
-      },
-      yaxis: [
-        {
-          min: 0,
-          max: this.props.data ? this.props.data.map(d => d.emissions).reduce((a, b) => Math.max(a,b), 0) + 50000 : 1000,
-          seriesName: 'CO²-Emissions',
-          axisTicks: {
-            show: true,
-          },
-          axisBorder: {
-            show: true,
-            color: '#008FFB',
-          },
-          labels: {
-            style: {
-              color: '#008FFB',
-            }
-          },
-          title: {
-            text: 'CO²-emissions (kt)',
-            style: {
-              color: '#008FFB',
-            }
-          },
-          tooltip: {
-            enabled: true
-          }
+    const options = (title, yaxis) => {
+      return {
+        theme: {
+          palette: 'palette6'
         },
-        {
-          min: 0,
-          max: (this.props.data && this.props.data.map(d => d.population)) ? this.props.data.map(d => d.population).reduce((a, b) => Math.max(a,b), 0) + 1000000 : 1000,
-          seriesName: 'Population',
-          axisTicks: {
-            show: true,
-          },
-          axisBorder: {
-            show: true,
-            color: '#00E396'
-          },
-          labels: {
-            style: {
-              color: '#00E396',
-            }
-          },
-          title: {
-            text: 'Population',
-            style: {
-              color: '#00E396',
-            }
+        title: {
+          text: title,
+          align: 'center',
+          margin: 20,
+          style: {
+            fontSize:  '20px',
+            color:  '#EA3546'
           },
         },
-        {
-          seriesName: 'CO²-Emissions',
-          min: 0,
-          max: (this.props.data && this.props.data.map(d => d.perCapita)) ? this.props.data.map(d => d.perCapita).reduce((a, b) => Math.max(a,b), 0) + 0.005 : 0.1,
-          opposite: true,
-          axisTicks: {
-            show: true,
+        yaxis: yaxis,
+        tooltip: {
+          fixed: {
+            enabled: true,
+            position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+            offsetY: 30,
+            offsetX: 60
           },
-          axisBorder: {
-            show: true,
-            color: '#FEB019',
-          },
-          labels: {
-            style: {
-              color: '#FEB019',
-            }
-          },
-          title: {
-            text: 'CO²-emissions Per Capita (kt)',
-            style: {
-              color: '#FEB019',
-            }
-          }
+          x: { formatter: (seriesName) => 'Year: ' + seriesName }
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'right',
+          offsetX: 40
         }
-      ],
-      tooltip: {
-        fixed: {
-          enabled: true,
-          position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
-          offsetY: 30,
-          offsetX: 60
-        },
-        x: { formatter: (seriesName) => 'Year: ' + seriesName }
-      },
-      legend: {
-        horizontalAlign: 'left',
-        offsetX: 40
-      }
+      };
     };
 
-    const series = [{
-      name: 'CO²-Emissions',
+    const countMax = (averages, data, add) => {
+      const maxOfAverages = averages.reduce((a, b) => Math.max(a, b), 0);
+      const maxOfData = data.reduce((a, b) => Math.max(a, b), 0);
+      return Math.max(maxOfAverages, maxOfData) + add;
+    };
+
+    const emissionsOptions = options('Development of CO²-Emissions', [{
+      min: 0,
+      max: this.props.data ? countMax(
+        this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.map(a => a.emissionsAverage) : [],
+        this.props.data.map(d => d.emissions),
+        5000
+      ) : 1000,
+      seriesName: 'CO²-Emissions',
+      axisTicks: {
+        show: true,
+      },
+      axisBorder: {
+        show: true,
+        color: '#662E9B',
+      },
+      labels: {
+        style: {
+          color: '#662E9B',
+        }
+      },
+      title: {
+        text: 'CO²-emissions (kt)',
+        style: {
+          color: '#662E9B',
+        }
+      },
+      tooltip: {
+        enabled: true
+      }
+    }]
+    );
+
+    const populationsOptions = options('Development of Populations', [{
+      min: 0,
+      max: (this.props.data && this.props.data.map(d => d.population)) ? countMax(
+        this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.map(a => a.populationAverage) : [],
+        this.props.data.map(d => d.population),
+        1000000
+      ) : 1000,
+      seriesName: 'Population',
+      axisTicks: {
+        show: true,
+      },
+      axisBorder: {
+        show: true,
+        color: '#662E9B'
+      },
+      labels: {
+        style: {
+          color: '#662E9B',
+        }
+      },
+      title: {
+        text: 'Population',
+        style: {
+          color: '#662E9B',
+        }
+      },
+      tooltip: {
+        enabled: true
+      }
+    }]
+    );
+
+    const perCapitaOptions = options('Development of CO²-Emissions per Capita', [
+      {
+        seriesName: 'CO²-Emissions Per Capita',
+        min: 0,
+        max: (this.props.data && this.props.data.map(d => d.perCapita)) ? countMax(
+          this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.map(a => a.perCapitaAverage * 1000000) : [],
+          this.props.data.map(d => d.perCapita * 1000000),
+          1000
+        ) : 1000,
+        axisTicks: {
+          show: true,
+        },
+        axisBorder: {
+          show: true,
+          color: '#662E9B',
+        },
+        labels: {
+          style: {
+            color: '#662E9B',
+          }
+        },
+        title: {
+          text: 'CO²-emissions Per Capita (kg)',
+          style: {
+            color: '#662E9B',
+          }
+        },
+        tooltip: {
+          enabled: true
+        }
+      }]
+    );
+
+    const seriesEmissions = [{
+      name: this.props.country ? `${this.props.country}` : 'Searched country',
       type: 'line',
       data: (this.props.data && this.props.data.map(d => d.emissions)) ? this.props.data.filter(d => d.emissions !== null).map((d) => {
         return {
@@ -107,41 +148,79 @@ class Result extends Component {
           y: d.emissions
         };
       }) : []
-    }, {
-      name: 'Population',
+    },
+    {
+      name: 'Average of countries with high income',
       type: 'line',
-      data: (this.props.data && this.props.data.map(d => d.population)) ? this.props.data.filter(d => d.population !== null).map((d) => {
+      data: this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.filter(a => a.year && a.emissionsAverage !== 0).map(a => {
         return {
-          x: d.year,
-          y: d.population
+          x: a.year,
+          y: a.emissionsAverage
         };
       }) : []
-    }, {
-      // TODO: per capita omaan charttiinsa
-      name: 'CO²-Emissions Per Capita',
+    }];
+
+    const seriesPopulations = [{
+      name: this.props.country ? `${this.props.country}` : 'Searched country',
+      type: 'line',
+      data: (this.props.data && this.props.data.map(d => d.population))
+        ? this.props.data.filter(d => d.population !== null).map((d) => {
+          return {
+            x: d.year,
+            y: d.population
+          };
+        }) : []
+    },
+    {
+      name: 'Average of countries with high income',
+      type: 'line',
+      data: this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.filter(a => a.year && a.populationAverage !== 0).map(a => {
+        return {
+          x: a.year,
+          y: a.populationAverage
+        };
+      }) : []
+    }];
+
+    const seriesPerCapita = [{
+      name: this.props.country ? `${this.props.country}` : 'Searched country',
       type: 'line',
       data: (this.props.data && this.props.data.map(d => d.perCapita))
         ? this.props.data.filter(d => d.perCapita !== null).map((d) => {
           return {
             x: d.year,
-            y: d.perCapita
+            y: d.perCapita * 1000000
           };
         })
         : []
+    },
+    {
+      name: 'Average of countries with high income',
+      type: 'line',
+      data: this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.filter(a => a.year && a.perCapitaAverage && a.perCapitaAverage !== 0).map(a => {
+        return {
+          x: a.year,
+          y: a.perCapitaAverage * 1000000
+        };
+      }) : []
     }];
 
     return (
       <div>
         <div className="App">
-          <h2>Result</h2>
+          <h2>Results</h2>
 
-          {/* näytä alla olevat vain jos on jotain näytettävää eli showResult = true */}
-          {/* näytä joku varoitushässäkkä jos country on NOT FOUND */}
+          {/* TODO: näytä joku varoitushässäkkä jos country on NOT FOUND */}
           <div id="country"><b>Country: {this.props.country}</b></div>
-          <p>Note that the scales of the axes are different.</p>
 
-          <div id="chart">
-            <Chart options={options} series={series} type="line" height="800px" width="1000px" />
+          <div id="emissions-chart" className='chart'>
+            <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="1000" />
+          </div>
+          <div id="populations-chart">
+            <Chart options={populationsOptions} series={seriesPopulations} type="line" width="1000" />
+          </div>
+          <div id="emissions-per-capita">
+            <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="1000" />
           </div>
         </div>
       </div>
@@ -152,7 +231,8 @@ class Result extends Component {
 const mapStateToProps = (state) => {
   return {
     country: state.search.country,
-    data: state.search.data
+    data: state.search.data,
+    highIncomeAverages: state.search.highIncomeAverages
   };
 };
 
