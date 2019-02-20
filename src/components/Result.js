@@ -42,14 +42,14 @@ class Result extends Component {
       return Math.max(maxOfAverages, maxOfData) + add;
     };
 
-    const emissionsOptions = options('Development of CO²-Emissions', [{
+    const emissionsOptions = options('Development of CO²-emissions', [{
       min: 0,
       max: this.props.data ? countMax(
         this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.map(a => a.emissionsAverage) : [],
         this.props.data.map(d => d.emissions),
         5000
       ) : 1000,
-      seriesName: 'CO²-Emissions',
+      seriesName: 'CO²-emissions',
       axisTicks: {
         show: true,
       },
@@ -106,9 +106,9 @@ class Result extends Component {
     }]
     );
 
-    const perCapitaOptions = options('Development of CO²-Emissions per Capita', [
+    const perCapitaOptions = options('Development of CO²-emissions per Capita', [
       {
-        seriesName: 'CO²-Emissions Per Capita',
+        seriesName: 'CO²-emissions Per Capita',
         min: 0,
         max: (this.props.data && this.props.data.map(d => d.perCapita)) ? countMax(
           this.props.highIncomeAverages ? this.props.highIncomeAverages.averages.map(a => a.perCapitaAverage * 1000000) : [],
@@ -210,7 +210,6 @@ class Result extends Component {
         <div className="App">
           <h2>Results</h2>
 
-          {/* TODO: näytä joku varoitushässäkkä jos country on NOT FOUND */}
           <div id="country"><b>Country: {this.props.country}</b></div>
 
           <div id="emissions-chart" className='chart'>

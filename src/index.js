@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import App from './components/App';
 import store from './state/store';
 import './styles/index.scss';
+import 'typeface-roboto';
 
 const render = () => {
   ReactDOM.render(

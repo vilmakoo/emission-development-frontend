@@ -1,4 +1,4 @@
-import searchService from '../services/search';
+import searchService from '../services/communicationWithServer';
 
 const initialState = { searchTerm: '', searchPopulations: false, compare: false };
 
@@ -30,6 +30,12 @@ const searchReducer = (state = initialState, action) => {
       highIncomeAverages: action.highIncomeAverages
     };
 
+  case 'SET_ERROR':
+    return {
+      ...state,
+      error: action.error
+    };
+
   default:
     return state;
   }
@@ -54,16 +60,35 @@ export const toggleCompareCheckBox = () => {
   };
 };
 
+export const setError = (error) => {
+  return {
+    type: 'SET_ERROR',
+    error
+  };
+};
+
 export const searchCountrysEmissions = (country, searchPopulations, compare) => {
   return async (dispatch) => {
-    const data = await searchService.countrysEmissions(country, searchPopulations, compare);
+    const data = await searchService.searchCountrysEmissions(country, searchPopulations, compare);
 
-    dispatch({
-      type: 'SET_RESULT',
-      country: data.country.name,
-      data: data.country.data,
-      highIncomeAverages: data.highIncomeAverages
-    });
+    if (data === 'error') {
+      dispatch(setError('Couldn\'t connect to the server'));
+    } else if (data.country.name === 'NOT FOUND') {
+      dispatch(setError('Country not found'));
+    } else {
+      dispatch({
+        type: 'SET_RESULT',
+        country: data.country.name,
+        data: data.country.data,
+        highIncomeAverages: data.highIncomeAverages
+      });
+    }
+
+    setTimeout(() => {
+      dispatch(
+        setError(null)
+      );
+    }, 4000);
   };
 };
 
