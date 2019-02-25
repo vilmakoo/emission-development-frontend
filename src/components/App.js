@@ -16,8 +16,8 @@ class App extends Component {
       <div className='container'>
         <Notification />
         <h1>CO²-emissions</h1>
-        <Button variant="warning" onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
         <SearchBar />
+        <Button variant="warning" onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
         <Result />
       </div>
     );

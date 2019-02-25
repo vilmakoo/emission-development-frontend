@@ -1,6 +1,6 @@
 import searchService from '../services/communicationWithServer';
 
-const initialState = { searchTerm: '', searchPopulations: false, compare: false };
+const initialState = { searchTerm: '', searchPopulations: false, compare: false, topEmitters: undefined };
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -24,7 +24,9 @@ const searchReducer = (state = initialState, action) => {
 
   case 'SET_RESULT':
     return {
-      ...state,
+      searchTerm: state.searchTerm,
+      searchPopulations: state.searchPopulations,
+      compare: state.compare,
       country: action.country,
       data: action.data,
       highIncomeAverages: action.highIncomeAverages
@@ -34,6 +36,14 @@ const searchReducer = (state = initialState, action) => {
     return {
       ...state,
       error: action.error
+    };
+
+  case 'SET_TOP_EMITTERS':
+    return {
+      searchTerm: state.searchTerm,
+      searchPopulations: state.searchPopulations,
+      compare: state.compare,
+      topEmitters: action.data
     };
 
   default:
@@ -81,6 +91,27 @@ export const searchCountrysEmissions = (country, searchPopulations, compare) => 
         country: data.country.name,
         data: data.country.data,
         highIncomeAverages: data.highIncomeAverages
+      });
+    }
+
+    setTimeout(() => {
+      dispatch(
+        setError(null)
+      );
+    }, 4000);
+  };
+};
+
+export const searchTopEmitters = () => {
+  return async (dispatch) => {
+    const data = await searchService.searchTopEmitters();
+
+    if (data === 'error') {
+      dispatch(setError('Couldn\'t connect to the server'));
+    } else {
+      dispatch({
+        type: 'SET_TOP_EMITTERS',
+        data
       });
     }
 

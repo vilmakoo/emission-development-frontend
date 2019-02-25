@@ -18,4 +18,13 @@ const updateDatabase = async () => {
   }
 };
 
-export default { searchCountrysEmissions, updateDatabase };
+const searchTopEmitters = async () => {
+  try {
+    const response = await axios.get('/api/emissions/top_emitters');
+    return response.data;
+  } catch (error) {
+    return 'error';
+  }
+};
+
+export default { searchCountrysEmissions, updateDatabase, searchTopEmitters };

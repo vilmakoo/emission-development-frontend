@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { changeSearchTerm, searchCountrysEmissions, togglePopulationCheckBox, toggleCompareCheckBox } from '../state/searchReducer';
+import { changeSearchTerm, searchCountrysEmissions, togglePopulationCheckBox, toggleCompareCheckBox, searchTopEmitters } from '../state/searchReducer';
 
 class SearchBar extends Component {
   render() {
@@ -22,16 +22,23 @@ class SearchBar extends Component {
       this.props.searchCountrysEmissions(this.props.searchTerm, this.props.searchPopulations, this.props.compare);
     };
 
+    const searchTopEmitters = (event) => {
+      this.props.searchTopEmitters();
+    };
+
     return (
-      <Form onSubmit={search}>
-        <Form.Label className={'search-title'}>Search</Form.Label>
-        <p>Search for a country to see how its CO² emissions have developed during the years</p>
-        {/* TODO: search with what? laita siis ohjeistus */}
-        <Form.Control className={'search-input'} type='input' value={this.props.searchTerm} onChange={handleSearchTermChange} placeholder='Search' />
-        <Form.Check className={'search-checkbox'} label={'Include populations'} onChange={handleIncludePopulationsClick} />
-        <Form.Check className={'search-checkbox'} label={'Compare to the averages of countries with high income'} onChange={handleCompareClick} />
-        <Button className={'search-button'} type='submit'>Search</Button>
-      </Form>
+      <div>
+        <Form onSubmit={search}>
+          <Form.Label className={'search-title'}>Search</Form.Label>
+          <p>Search for a country to see how its CO² emissions have developed during the years</p>
+          {/* TODO: search with what? laita siis ohjeistus */}
+          <Form.Control className={'search-input'} type='input' value={this.props.searchTerm} onChange={handleSearchTermChange} placeholder='Search' />
+          <Form.Check className={'search-checkbox'} label={'Include populations'} onChange={handleIncludePopulationsClick} />
+          <Form.Check className={'search-checkbox'} label={'Compare to the averages of countries with high income'} onChange={handleCompareClick} />
+          <Button className={'search-button'} type='submit'>Search</Button>
+        </Form>
+        <Button variant='info' onClick={searchTopEmitters}>Search for countries with largest emissions in 2014</Button>
+      </div>
     );
   }
 }
@@ -48,7 +55,8 @@ const mapDispatchToProps = {
   changeSearchTerm,
   searchCountrysEmissions,
   togglePopulationCheckBox,
-  toggleCompareCheckBox
+  toggleCompareCheckBox,
+  searchTopEmitters
 };
 
 const ConnectedSearchBar = connect(
