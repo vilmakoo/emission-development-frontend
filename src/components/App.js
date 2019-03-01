@@ -15,13 +15,15 @@ class App extends Component {
 
     return (
       <div className='container'>
-        <Info />
-        <div className='rest'>
-          <Notification />
-          <h1>CO²-emissions</h1>
-          <SearchBar />
-          <Button className={'search-button'} variant='outlined' size='large' onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
-          <Result />
+        <h1 className='title'>CO²-emissions</h1>
+        <div className='application'>
+          <Info />
+          <div>
+            <Notification />
+            <SearchBar />
+            <Button className={'button'} variant='outlined' size='large' onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
+            <Result />
+          </div>
         </div>
       </div>
     );

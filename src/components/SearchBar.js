@@ -39,23 +39,27 @@ class SearchBar extends Component {
 
           <Input className={'search-input'} type='input' onChange={handleSearchTermChange} placeholder='Search' value={this.props.searchTerm} />
 
-          <div className={'checkboxes'}>
-            <FormControlLabel control={
-              <Checkbox style={{ fontSize: '20px' }} className={'search-checkbox'} checked={this.props.searchPopulations} onChange={handleIncludePopulationsClick} />
-            }
-            label='Include populations'
+          <div>
+            <FormControlLabel
+              className={'search-checkbox'}
+              control={
+                <Checkbox checked={this.props.searchPopulations} onChange={handleIncludePopulationsClick} />
+              }
+              label='Include populations'
             />
 
-            <FormControlLabel control={
-              <Checkbox checked={this.props.compare} onChange={handleCompareClick} />
-            }
-            label='Compare to the averages of countries with high income'
+            <FormControlLabel
+              className={'search-checkbox'}
+              control={
+                <Checkbox checked={this.props.compare} onChange={handleCompareClick} />
+              }
+              label='Compare to the averages of countries with high income'
             />
           </div>
 
-          <Button className={'search-button'} type='submit' variant='outlined' color='primary' size='large' onClick={search}>Search</Button>
+          <Button className={'button'} type='submit' variant='outlined' color='primary' size='large' onClick={search}>Search</Button>
 
-          <Button className={'search-button'} variant='outlined' color='secondary' onClick={searchTopEmitters} size='large'>Search for countries with
+          <Button className={'button'} variant='outlined' color='secondary' onClick={searchTopEmitters} size='large'>Search for countries with
           largest emissions per capita in 2014</Button>
         </form>
       </div>

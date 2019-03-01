@@ -11,7 +11,7 @@ class Info extends Component {
       <div>
         <Card className={'info'}>
           <CardContent>
-            <Typography variant='h2' component='h3'color='primary' gutterBottom={true}>
+            <Typography variant='h2' component='h3' color='primary' gutterBottom={true}>
               Welcome!
             </Typography>
 

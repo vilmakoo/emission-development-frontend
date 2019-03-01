@@ -3,6 +3,18 @@
 @import "notification";
 @import "info-box";
 
-.container {
+.application {
   display: flex;
+}
+
+.button {
+  margin-top: 7px!important;
+  display: block!important;
+  font-size: 12px!important;
+}
+
+.title {
+  color: #449DD1;
+  font-size: 60px;
+  padding: 2rem 0 4rem 8rem;
 }

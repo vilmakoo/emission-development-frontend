@@ -12,7 +12,7 @@ class Result extends Component {
       result = (<Charts />);
     } else if (this.props.topEmitters) {
       result = (<List>
-        {this.props.topEmitters.map(c => (<ListItem key={c}>{c}</ListItem>))}
+        {this.props.topEmitters.map((c, i) => (<ListItem key={c}>{i+1}. {c}</ListItem>))}
       </List>);
     } else {
       result = (<p>Results will be shown here.</p>);

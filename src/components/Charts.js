@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
+import { showChart } from '../state/chartReducer';
 
 class Charts extends Component {
   render() {
@@ -213,22 +214,51 @@ class Charts extends Component {
       }) : []
     }];
 
+    const handleButtonClick = (chart) => () => {
+      this.props.showChart(chart);
+    };
+
+    let emissionChart;
+    if (this.props.showEmissionDevelopment) {
+      emissionChart = (
+        <div id="emissions-chart" className='chart'>
+          <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="700" />
+        </div>
+      );
+    } else {
+      emissionChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('emissions')}>Show emission development</Button>);
+    }
+
+    let populationChart;
+    if (this.props.showPopulationDevelopment) {
+      populationChart = (
+        <div id="populations-chart">
+          <Chart options={populationsOptions} series={seriesPopulations} type="line" width="700" />
+        </div>
+      );
+    } else {
+      populationChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('populations')}>Show population development</Button>);
+    }
+
+    let perCapitaChart;
+    if (this.props.showPerCapitaDevelopment) {
+      perCapitaChart = (
+        <div id="emissions-per-capita">
+          <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="700" />
+        </div>
+      );
+    } else {
+      perCapitaChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('perCapita')}>Show emissions development per capita</Button>);
+    }
+
     return (
       <div>
         <div className="App">
           <div id="country"><b>Country: {this.props.country}</b></div>
 
-          <div id="emissions-chart" className='chart'>
-            <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="700" />
-          </div>
-
-
-          <div id="populations-chart">
-            <Chart options={populationsOptions} series={seriesPopulations} type="line" width="700" />
-          </div>
-          <div id="emissions-per-capita">
-            <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="700" />
-          </div>
+          {emissionChart}
+          {populationChart}
+          {perCapitaChart}
         </div>
       </div>
     );
@@ -239,10 +269,17 @@ const mapStateToProps = (state) => {
   return {
     country: state.search.country,
     data: state.search.data,
-    highIncomeAverages: state.search.highIncomeAverages
+    highIncomeAverages: state.search.highIncomeAverages,
+    showEmissionDevelopment: state.charts.showEmissionDevelopment,
+    showPopulationDevelopment: state.charts.showPopulationDevelopment,
+    showPerCapitaDevelopment: state.charts.showPerCapitaDevelopment
   };
 };
 
-const ConnectedCharts = connect(mapStateToProps)(Charts);
+const mapDispatchToProps = {
+  showChart
+};
+
+const ConnectedCharts = connect(mapStateToProps, mapDispatchToProps)(Charts);
 
 export default ConnectedCharts;
