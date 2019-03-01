@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
+import Input from '@material-ui/core/Input';
+import Button from '@material-ui/core/Button';
 import { changeSearchTerm, searchCountrysEmissions, togglePopulationCheckBox, toggleCompareCheckBox, searchTopEmitters } from '../state/searchReducer';
 
 class SearchBar extends Component {
@@ -28,16 +32,32 @@ class SearchBar extends Component {
 
     return (
       <div>
-        <Form onSubmit={search}>
-          <Form.Label className={'search-title'}>Search</Form.Label>
+        <form>
+          <FormLabel className={'search-title'}>Search</FormLabel>
+
           <p>Search for a country to see how its CO² emissions have developed during the years</p>
-          {/* TODO: search with what? laita siis ohjeistus */}
-          <Form.Control className={'search-input'} type='input' value={this.props.searchTerm} onChange={handleSearchTermChange} placeholder='Search' />
-          <Form.Check className={'search-checkbox'} label={'Include populations'} onChange={handleIncludePopulationsClick} />
-          <Form.Check className={'search-checkbox'} label={'Compare to the averages of countries with high income'} onChange={handleCompareClick} />
-          <Button className={'search-button'} type='submit'>Search</Button>
-        </Form>
-        <Button variant='info' onClick={searchTopEmitters}>Search for countries with largest emissions in 2014</Button>
+
+          <Input className={'search-input'} type='input' onChange={handleSearchTermChange} placeholder='Search' value={this.props.searchTerm} />
+
+          <div className={'checkboxes'}>
+            <FormControlLabel control={
+              <Checkbox style={{ fontSize: '20px' }} className={'search-checkbox'} checked={this.props.searchPopulations} onChange={handleIncludePopulationsClick} />
+            }
+            label='Include populations'
+            />
+
+            <FormControlLabel control={
+              <Checkbox checked={this.props.compare} onChange={handleCompareClick} />
+            }
+            label='Compare to the averages of countries with high income'
+            />
+          </div>
+
+          <Button className={'search-button'} type='submit' variant='outlined' color='primary' size='large' onClick={search}>Search</Button>
+
+          <Button className={'search-button'} variant='outlined' color='secondary' onClick={searchTopEmitters} size='large'>Search for countries with
+          largest emissions per capita in 2014</Button>
+        </form>
       </div>
     );
   }

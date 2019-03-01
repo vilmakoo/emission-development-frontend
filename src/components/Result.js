@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ListGroup from 'react-bootstrap/ListGroup';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
 import Charts from './Charts';
 
 class Result extends Component {
@@ -9,9 +11,11 @@ class Result extends Component {
     if (this.props.data) {
       result = (<Charts />);
     } else if (this.props.topEmitters) {
-      result = (<ListGroup>
-        {this.props.topEmitters.map(c => (<ListGroup.Item key={c}>{c}</ListGroup.Item>))}
-      </ListGroup>);
+      result = (<List>
+        {this.props.topEmitters.map(c => (<ListItem key={c}>{c}</ListItem>))}
+      </List>);
+    } else {
+      result = (<p>Results will be shown here.</p>);
     }
 
     return (

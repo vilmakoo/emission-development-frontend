@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux';
 import SearchBar from './SearchBar';
 import Result from './Result';
 import Notification from './Notification';
+import Info from './Info';
 import { updateDatabase } from '../state/databaseReducer';
 
 class App extends Component {
@@ -14,11 +15,14 @@ class App extends Component {
 
     return (
       <div className='container'>
-        <Notification />
-        <h1>CO²-emissions</h1>
-        <SearchBar />
-        <Button variant="warning" onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
-        <Result />
+        <Info />
+        <div className='rest'>
+          <Notification />
+          <h1>CO²-emissions</h1>
+          <SearchBar />
+          <Button className={'search-button'} variant='outlined' size='large' onClick={handleUpdateDatabaseButtonClick}>Update database</Button>
+          <Result />
+        </div>
       </div>
     );
   }

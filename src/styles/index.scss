@@ -1,3 +1,8 @@
 @import "search-bar";
 @import "result";
 @import "notification";
+@import "info-box";
+
+.container {
+  display: flex;
+}

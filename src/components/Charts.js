@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
 class Charts extends Component {
   render() {
@@ -19,6 +20,12 @@ class Charts extends Component {
           },
         },
         yaxis: yaxis,
+        xaxis: {
+          labels: {
+            rotateAlways: true
+          },
+          max: 2014
+        },
         tooltip: {
           fixed: {
             enabled: true,
@@ -31,7 +38,8 @@ class Charts extends Component {
         legend: {
           position: 'top',
           horizontalAlign: 'right',
-          offsetX: 40
+          offsetX: 40,
+          showForNullSeries: false,
         }
       };
     };
@@ -211,13 +219,15 @@ class Charts extends Component {
           <div id="country"><b>Country: {this.props.country}</b></div>
 
           <div id="emissions-chart" className='chart'>
-            <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="1000" />
+            <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="700" />
           </div>
+
+
           <div id="populations-chart">
-            <Chart options={populationsOptions} series={seriesPopulations} type="line" width="1000" />
+            <Chart options={populationsOptions} series={seriesPopulations} type="line" width="700" />
           </div>
           <div id="emissions-per-capita">
-            <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="1000" />
+            <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="700" />
           </div>
         </div>
       </div>
