@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Chart from 'react-apexcharts';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import { showChart } from '../state/chartReducer';
+import { toggleShowChart } from '../state/chartReducer';
 
 class Charts extends Component {
   render() {
@@ -215,40 +215,34 @@ class Charts extends Component {
     }];
 
     const handleButtonClick = (chart) => () => {
-      this.props.showChart(chart);
+      this.props.toggleShowChart(chart);
     };
 
-    let emissionChart;
+    let emissionChart = null;
     if (this.props.showEmissionDevelopment) {
       emissionChart = (
         <div id="emissions-chart" className='chart'>
           <Chart options={emissionsOptions} series={seriesEmissions} type="line" width="700" />
         </div>
       );
-    } else {
-      emissionChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('emissions')}>Show emission development</Button>);
     }
 
-    let populationChart;
+    let populationChart = null;
     if (this.props.showPopulationDevelopment) {
       populationChart = (
-        <div id="populations-chart">
+        <div id="populations-chart" className='chart'>
           <Chart options={populationsOptions} series={seriesPopulations} type="line" width="700" />
         </div>
       );
-    } else {
-      populationChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('populations')}>Show population development</Button>);
     }
 
-    let perCapitaChart;
+    let perCapitaChart = null;
     if (this.props.showPerCapitaDevelopment) {
       perCapitaChart = (
-        <div id="emissions-per-capita">
+        <div id="emissions-per-capita" className='chart'>
           <Chart options={perCapitaOptions} series={seriesPerCapita} type="line" width="700" />
         </div>
       );
-    } else {
-      perCapitaChart = (<Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('perCapita')}>Show emissions development per capita</Button>);
     }
 
     return (
@@ -256,8 +250,13 @@ class Charts extends Component {
         <div className="App">
           <div id="country"><b>Country: {this.props.country}</b></div>
 
+          <Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('emissions')}>Show emission development</Button>
           {emissionChart}
+
+          <Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('populations')}>Show population development</Button>
           {populationChart}
+
+          <Button className='button' variant='outlined' color='primary' onClick={handleButtonClick('perCapita')}>Show emissions development per capita</Button>
           {perCapitaChart}
         </div>
       </div>
@@ -277,7 +276,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  showChart
+  toggleShowChart
 };
 
 const ConnectedCharts = connect(mapStateToProps, mapDispatchToProps)(Charts);

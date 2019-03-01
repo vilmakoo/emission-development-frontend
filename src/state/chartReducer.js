@@ -2,22 +2,22 @@ const initialState = { showEmissionDevelopment: false, showPopulationDevelopment
 
 const chartReducer = (state = initialState, action) => {
   switch (action.type) {
-  case 'SHOW_EMISSION_DEVELOPMENT':
+  case 'TOGGLE_SHOW_EMISSION_DEVELOPMENT':
     return {
       ...state,
-      showEmissionDevelopment: true
+      showEmissionDevelopment: !state.showEmissionDevelopment
     };
 
-  case 'SHOW_POPULATION_DEVELOPMENT':
+  case 'TOGGLE_SHOW_POPULATION_DEVELOPMENT':
     return {
       ...state,
-      showPopulationDevelopment: true
+      showPopulationDevelopment: !state.showPopulationDevelopment
     };
 
-  case 'SHOW_PER_CAPITA_DEVELOPMENT':
+  case 'TOGGLE_SHOW_PER_CAPITA_DEVELOPMENT':
     return {
       ...state,
-      showPerCapitaDevelopment: true
+      showPerCapitaDevelopment: !state.showPerCapitaDevelopment
     };
 
   default:
@@ -25,18 +25,18 @@ const chartReducer = (state = initialState, action) => {
   }
 };
 
-export const showChart = (chart) => {
+export const toggleShowChart = (chart) => {
   if (chart === 'emissions') {
     return {
-      type: 'SHOW_EMISSION_DEVELOPMENT'
+      type: 'TOGGLE_SHOW_EMISSION_DEVELOPMENT'
     };
   } else if (chart === 'populations') {
     return {
-      type: 'SHOW_POPULATION_DEVELOPMENT'
+      type: 'TOGGLE_SHOW_POPULATION_DEVELOPMENT'
     };
   } else {
     return {
-      type: 'SHOW_PER_CAPITA_DEVELOPMENT'
+      type: 'TOGGLE_SHOW_PER_CAPITA_DEVELOPMENT'
     };
   }
 };
